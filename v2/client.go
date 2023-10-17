@@ -45,9 +45,9 @@ const (
 
 // Client is used to make twitter v2 API callouts.
 //
-// Authorizer is used to add auth to the request
+// # Authorizer is used to add auth to the request
 //
-// Client is the HTTP client to use for all requests
+// # Client is the HTTP client to use for all requests
 //
 // Host is the base URL to use like, https://api.twitter.com
 type Client struct {
@@ -74,7 +74,9 @@ func (c *Client) CreateTweet(ctx context.Context, tweet CreateTweetRequest) (*Cr
 	}
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("Accept", "application/json")
-	c.Authorizer.Add(req)
+	if c.Authorizer != nil {
+		c.Authorizer.Add(req)
+	}
 
 	resp, err := c.Client.Do(req)
 	if err != nil {
@@ -125,7 +127,9 @@ func (c *Client) DeleteTweet(ctx context.Context, id string) (*DeleteTweetRespon
 		return nil, fmt.Errorf("delete tweet request: %w", err)
 	}
 	req.Header.Add("Accept", "application/json")
-	c.Authorizer.Add(req)
+	if c.Authorizer != nil {
+		c.Authorizer.Add(req)
+	}
 
 	resp, err := c.Client.Do(req)
 	if err != nil {
@@ -182,7 +186,9 @@ func (c *Client) TweetLookup(ctx context.Context, ids []string, opts TweetLookup
 		return nil, fmt.Errorf("tweet lookup request: %w", err)
 	}
 	req.Header.Add("Accept", "application/json")
-	c.Authorizer.Add(req)
+	if c.Authorizer != nil {
+		c.Authorizer.Add(req)
+	}
 	opts.addQuery(req)
 	if len(ids) > 1 {
 		q := req.URL.Query()
@@ -263,7 +269,9 @@ func (c *Client) UserLookup(ctx context.Context, ids []string, opts UserLookupOp
 		return nil, fmt.Errorf("user lookup request: %w", err)
 	}
 	req.Header.Add("Accept", "application/json")
-	c.Authorizer.Add(req)
+	if c.Authorizer != nil {
+		c.Authorizer.Add(req)
+	}
 	opts.addQuery(req)
 	if len(ids) > 1 {
 		q := req.URL.Query()
@@ -343,7 +351,9 @@ func (c *Client) UserRetweetLookup(ctx context.Context, tweetID string, opts Use
 		return nil, fmt.Errorf("user retweet lookup request: %w", err)
 	}
 	req.Header.Add("Accept", "application/json")
-	c.Authorizer.Add(req)
+	if c.Authorizer != nil {
+		c.Authorizer.Add(req)
+	}
 	opts.addQuery(req)
 
 	resp, err := c.Client.Do(req)
@@ -407,7 +417,9 @@ func (c *Client) UserNameLookup(ctx context.Context, usernames []string, opts Us
 		return nil, fmt.Errorf("username lookup request: %w", err)
 	}
 	req.Header.Add("Accept", "application/json")
-	c.Authorizer.Add(req)
+	if c.Authorizer != nil {
+		c.Authorizer.Add(req)
+	}
 	opts.addQuery(req)
 	if len(usernames) > 1 {
 		q := req.URL.Query()
@@ -479,7 +491,9 @@ func (c *Client) AuthUserLookup(ctx context.Context, opts UserLookupOpts) (*User
 		return nil, fmt.Errorf("auth user lookup request: %w", err)
 	}
 	req.Header.Add("Accept", "application/json")
-	c.Authorizer.Add(req)
+	if c.Authorizer != nil {
+		c.Authorizer.Add(req)
+	}
 	opts.addQuery(req)
 
 	resp, err := c.Client.Do(req)
@@ -542,7 +556,9 @@ func (c *Client) TweetRecentSearch(ctx context.Context, query string, opts Tweet
 		return nil, fmt.Errorf("tweet recent search request: %w", err)
 	}
 	req.Header.Add("Accept", "application/json")
-	c.Authorizer.Add(req)
+	if c.Authorizer != nil {
+		c.Authorizer.Add(req)
+	}
 	opts.addQuery(req)
 	q := req.URL.Query()
 	q.Add("query", query)
@@ -618,7 +634,9 @@ func (c *Client) TweetSearch(ctx context.Context, query string, opts TweetSearch
 		return nil, fmt.Errorf("tweet search request: %w", err)
 	}
 	req.Header.Add("Accept", "application/json")
-	c.Authorizer.Add(req)
+	if c.Authorizer != nil {
+		c.Authorizer.Add(req)
+	}
 	opts.addQuery(req)
 	q := req.URL.Query()
 	q.Add("query", query)
@@ -692,7 +710,9 @@ func (c *Client) TweetSearchStreamAddRule(ctx context.Context, rules []TweetSear
 	}
 	req.Header.Add("Accept", "application/json")
 	req.Header.Add("Content-Type", "application/json")
-	c.Authorizer.Add(req)
+	if c.Authorizer != nil {
+		c.Authorizer.Add(req)
+	}
 	if dryRun {
 		q := req.URL.Query()
 		q.Add("dry_run", "true")
@@ -766,7 +786,9 @@ func (c *Client) TweetSearchStreamDeleteRuleByID(ctx context.Context, ruleIDs []
 	}
 	req.Header.Add("Accept", "application/json")
 	req.Header.Add("Content-Type", "application/json")
-	c.Authorizer.Add(req)
+	if c.Authorizer != nil {
+		c.Authorizer.Add(req)
+	}
 	if dryRun {
 		q := req.URL.Query()
 		q.Add("dry_run", "true")
@@ -836,7 +858,9 @@ func (c *Client) TweetSearchStreamDeleteRuleByValue(ctx context.Context, ruleVal
 	}
 	req.Header.Add("Accept", "application/json")
 	req.Header.Add("Content-Type", "application/json")
-	c.Authorizer.Add(req)
+	if c.Authorizer != nil {
+		c.Authorizer.Add(req)
+	}
 	if dryRun {
 		q := req.URL.Query()
 		q.Add("dry_run", "true")
@@ -887,7 +911,9 @@ func (c *Client) TweetSearchStreamRules(ctx context.Context, ruleIDs []TweetSear
 		return nil, fmt.Errorf("tweet search stream rules http request %w", err)
 	}
 	req.Header.Add("Accept", "application/json")
-	c.Authorizer.Add(req)
+	if c.Authorizer != nil {
+		c.Authorizer.Add(req)
+	}
 	if len(ruleIDs) > 0 {
 		ruleArr := tweetSearchStreamRuleIDs(ruleIDs)
 		if err := ruleArr.validate(); err != nil {
@@ -949,7 +975,9 @@ func (c *Client) TweetSearchStream(ctx context.Context, opts TweetSearchStreamOp
 		return nil, fmt.Errorf("tweet search stream request: %w", err)
 	}
 	req.Header.Add("Accept", "application/json")
-	c.Authorizer.Add(req)
+	if c.Authorizer != nil {
+		c.Authorizer.Add(req)
+	}
 	opts.addQuery(req)
 
 	resp, err := c.Client.Do(req)
@@ -995,7 +1023,9 @@ func (c *Client) TweetRecentCounts(ctx context.Context, query string, opts Tweet
 		return nil, fmt.Errorf("tweet recent counts request: %w", err)
 	}
 	req.Header.Add("Accept", "application/json")
-	c.Authorizer.Add(req)
+	if c.Authorizer != nil {
+		c.Authorizer.Add(req)
+	}
 	opts.addQuery(req)
 	q := req.URL.Query()
 	q.Add("query", query)
@@ -1059,7 +1089,9 @@ func (c *Client) TweetAllCounts(ctx context.Context, query string, opts TweetAll
 		return nil, fmt.Errorf("tweet all counts request: %w", err)
 	}
 	req.Header.Add("Accept", "application/json")
-	c.Authorizer.Add(req)
+	if c.Authorizer != nil {
+		c.Authorizer.Add(req)
+	}
 	opts.addQuery(req)
 	q := req.URL.Query()
 	q.Add("query", query)
@@ -1117,7 +1149,9 @@ func (c *Client) UserFollowingLookup(ctx context.Context, id string, opts UserFo
 		return nil, fmt.Errorf("user following lookup request: %w", err)
 	}
 	req.Header.Add("Accept", "application/json")
-	c.Authorizer.Add(req)
+	if c.Authorizer != nil {
+		c.Authorizer.Add(req)
+	}
 	opts.addQuery(req)
 	q := req.URL.Query()
 	req.URL.RawQuery = q.Encode()
@@ -1198,7 +1232,9 @@ func (c *Client) UserFollows(ctx context.Context, userID, targetUserID string) (
 	}
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("Accept", "application/json")
-	c.Authorizer.Add(req)
+	if c.Authorizer != nil {
+		c.Authorizer.Add(req)
+	}
 
 	resp, err := c.Client.Do(req)
 	if err != nil {
@@ -1253,7 +1289,9 @@ func (c *Client) DeleteUserFollows(ctx context.Context, userID, targetUserID str
 		return nil, fmt.Errorf("user delete follows request: %w", err)
 	}
 	req.Header.Add("Accept", "application/json")
-	c.Authorizer.Add(req)
+	if c.Authorizer != nil {
+		c.Authorizer.Add(req)
+	}
 
 	resp, err := c.Client.Do(req)
 	if err != nil {
@@ -1303,7 +1341,9 @@ func (c *Client) UserFollowersLookup(ctx context.Context, id string, opts UserFo
 		return nil, fmt.Errorf("user followers lookup request: %w", err)
 	}
 	req.Header.Add("Accept", "application/json")
-	c.Authorizer.Add(req)
+	if c.Authorizer != nil {
+		c.Authorizer.Add(req)
+	}
 	opts.addQuery(req)
 	q := req.URL.Query()
 	req.URL.RawQuery = q.Encode()
@@ -1377,7 +1417,9 @@ func (c *Client) UserTweetTimeline(ctx context.Context, userID string, opts User
 		return nil, fmt.Errorf("user tweet timeline request: %w", err)
 	}
 	req.Header.Add("Accept", "application/json")
-	c.Authorizer.Add(req)
+	if c.Authorizer != nil {
+		c.Authorizer.Add(req)
+	}
 	opts.addQuery(req)
 
 	resp, err := c.Client.Do(req)
@@ -1449,7 +1491,9 @@ func (c *Client) UserMentionTimeline(ctx context.Context, userID string, opts Us
 		return nil, fmt.Errorf("user mention timeline request: %w", err)
 	}
 	req.Header.Add("Accept", "application/json")
-	c.Authorizer.Add(req)
+	if c.Authorizer != nil {
+		c.Authorizer.Add(req)
+	}
 	opts.addQuery(req)
 
 	resp, err := c.Client.Do(req)
@@ -1522,7 +1566,9 @@ func (c *Client) UserTweetReverseChronologicalTimeline(ctx context.Context, user
 		return nil, fmt.Errorf("user tweet reverse chronological timeline request: %w", err)
 	}
 	req.Header.Add("Accept", "application/json")
-	c.Authorizer.Add(req)
+	if c.Authorizer != nil {
+		c.Authorizer.Add(req)
+	}
 	opts.addQuery(req)
 
 	resp, err := c.Client.Do(req)
@@ -1591,7 +1637,9 @@ func (c Client) TweetHideReplies(ctx context.Context, id string, hide bool) (*Tw
 	}
 	req.Header.Add("Accept", "application/json")
 	req.Header.Add("Content-Type", "application/json")
-	c.Authorizer.Add(req)
+	if c.Authorizer != nil {
+		c.Authorizer.Add(req)
+	}
 
 	resp, err := c.Client.Do(req)
 	if err != nil {
@@ -1655,7 +1703,9 @@ func (c *Client) UserRetweet(ctx context.Context, userID, tweetID string) (*User
 	}
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("Accept", "application/json")
-	c.Authorizer.Add(req)
+	if c.Authorizer != nil {
+		c.Authorizer.Add(req)
+	}
 
 	resp, err := c.Client.Do(req)
 	if err != nil {
@@ -1710,7 +1760,9 @@ func (c *Client) DeleteUserRetweet(ctx context.Context, userID, tweetID string) 
 		return nil, fmt.Errorf("user delete retweet request: %w", err)
 	}
 	req.Header.Add("Accept", "application/json")
-	c.Authorizer.Add(req)
+	if c.Authorizer != nil {
+		c.Authorizer.Add(req)
+	}
 
 	resp, err := c.Client.Do(req)
 	if err != nil {
@@ -1764,7 +1816,9 @@ func (c *Client) UserBlocksLookup(ctx context.Context, userID string, opts UserB
 		return nil, fmt.Errorf("user blocked lookup request: %w", err)
 	}
 	req.Header.Add("Accept", "application/json")
-	c.Authorizer.Add(req)
+	if c.Authorizer != nil {
+		c.Authorizer.Add(req)
+	}
 	opts.addQuery(req)
 	q := req.URL.Query()
 	req.URL.RawQuery = q.Encode()
@@ -1845,7 +1899,9 @@ func (c *Client) UserBlocks(ctx context.Context, userID, targetUserID string) (*
 	}
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("Accept", "application/json")
-	c.Authorizer.Add(req)
+	if c.Authorizer != nil {
+		c.Authorizer.Add(req)
+	}
 
 	resp, err := c.Client.Do(req)
 	if err != nil {
@@ -1900,7 +1956,9 @@ func (c *Client) DeleteUserBlocks(ctx context.Context, userID, targetUserID stri
 		return nil, fmt.Errorf("user delete blocks request: %w", err)
 	}
 	req.Header.Add("Accept", "application/json")
-	c.Authorizer.Add(req)
+	if c.Authorizer != nil {
+		c.Authorizer.Add(req)
+	}
 
 	resp, err := c.Client.Do(req)
 	if err != nil {
@@ -1954,7 +2012,9 @@ func (c *Client) UserMutesLookup(ctx context.Context, userID string, opts UserMu
 		return nil, fmt.Errorf("user muted lookup request: %w", err)
 	}
 	req.Header.Add("Accept", "application/json")
-	c.Authorizer.Add(req)
+	if c.Authorizer != nil {
+		c.Authorizer.Add(req)
+	}
 	opts.addQuery(req)
 	q := req.URL.Query()
 	req.URL.RawQuery = q.Encode()
@@ -2035,7 +2095,9 @@ func (c *Client) UserMutes(ctx context.Context, userID, targetUserID string) (*U
 	}
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("Accept", "application/json")
-	c.Authorizer.Add(req)
+	if c.Authorizer != nil {
+		c.Authorizer.Add(req)
+	}
 
 	resp, err := c.Client.Do(req)
 	if err != nil {
@@ -2090,7 +2152,9 @@ func (c *Client) DeleteUserMutes(ctx context.Context, userID, targetUserID strin
 		return nil, fmt.Errorf("user delete mutes request: %w", err)
 	}
 	req.Header.Add("Accept", "application/json")
-	c.Authorizer.Add(req)
+	if c.Authorizer != nil {
+		c.Authorizer.Add(req)
+	}
 
 	resp, err := c.Client.Do(req)
 	if err != nil {
@@ -2149,7 +2213,9 @@ func (c *Client) TweetLikesLookup(ctx context.Context, tweetID string, opts Twee
 		return nil, fmt.Errorf("user tweet likes lookup request: %w", err)
 	}
 	req.Header.Add("Accept", "application/json")
-	c.Authorizer.Add(req)
+	if c.Authorizer != nil {
+		c.Authorizer.Add(req)
+	}
 	opts.addQuery(req)
 
 	resp, err := c.Client.Do(req)
@@ -2217,7 +2283,9 @@ func (c *Client) UserLikesLookup(ctx context.Context, userID string, opts UserLi
 		return nil, fmt.Errorf("tweet user likes lookup request: %w", err)
 	}
 	req.Header.Add("Accept", "application/json")
-	c.Authorizer.Add(req)
+	if c.Authorizer != nil {
+		c.Authorizer.Add(req)
+	}
 	opts.addQuery(req)
 
 	resp, err := c.Client.Do(req)
@@ -2289,7 +2357,9 @@ func (c *Client) UserLikes(ctx context.Context, userID, tweetID string) (*UserLi
 	}
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("Accept", "application/json")
-	c.Authorizer.Add(req)
+	if c.Authorizer != nil {
+		c.Authorizer.Add(req)
+	}
 
 	resp, err := c.Client.Do(req)
 	if err != nil {
@@ -2344,7 +2414,9 @@ func (c *Client) DeleteUserLikes(ctx context.Context, userID, tweetID string) (*
 		return nil, fmt.Errorf("user delete likes request: %w", err)
 	}
 	req.Header.Add("Accept", "application/json")
-	c.Authorizer.Add(req)
+	if c.Authorizer != nil {
+		c.Authorizer.Add(req)
+	}
 
 	resp, err := c.Client.Do(req)
 	if err != nil {
@@ -2397,7 +2469,9 @@ func (c *Client) TweetSampleStream(ctx context.Context, opts TweetSampleStreamOp
 		return nil, fmt.Errorf("tweet sample stream request: %w", err)
 	}
 	req.Header.Add("Accept", "application/json")
-	c.Authorizer.Add(req)
+	if c.Authorizer != nil {
+		c.Authorizer.Add(req)
+	}
 	opts.addQuery(req)
 
 	resp, err := c.Client.Do(req)
@@ -2443,7 +2517,9 @@ func (c *Client) ListLookup(ctx context.Context, listID string, opts ListLookupO
 		return nil, fmt.Errorf("list lookup request: %w", err)
 	}
 	req.Header.Add("Accept", "application/json")
-	c.Authorizer.Add(req)
+	if c.Authorizer != nil {
+		c.Authorizer.Add(req)
+	}
 	opts.addQuery(req)
 
 	resp, err := c.Client.Do(req)
@@ -2507,7 +2583,9 @@ func (c *Client) UserListLookup(ctx context.Context, userID string, opts UserLis
 		return nil, fmt.Errorf("user list lookup request: %w", err)
 	}
 	req.Header.Add("Accept", "application/json")
-	c.Authorizer.Add(req)
+	if c.Authorizer != nil {
+		c.Authorizer.Add(req)
+	}
 	opts.addQuery(req)
 
 	resp, err := c.Client.Do(req)
@@ -2573,7 +2651,9 @@ func (c *Client) ListTweetLookup(ctx context.Context, listID string, opts ListTw
 		return nil, fmt.Errorf("list tweet lookup request: %w", err)
 	}
 	req.Header.Add("Accept", "application/json")
-	c.Authorizer.Add(req)
+	if c.Authorizer != nil {
+		c.Authorizer.Add(req)
+	}
 	opts.addQuery(req)
 
 	resp, err := c.Client.Do(req)
@@ -2641,7 +2721,9 @@ func (c *Client) CreateList(ctx context.Context, list ListMetaData) (*ListCreate
 	}
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("Accept", "application/json")
-	c.Authorizer.Add(req)
+	if c.Authorizer != nil {
+		c.Authorizer.Add(req)
+	}
 
 	resp, err := c.Client.Do(req)
 	if err != nil {
@@ -2701,7 +2783,9 @@ func (c *Client) UpdateList(ctx context.Context, listID string, update ListMetaD
 	}
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("Accept", "application/json")
-	c.Authorizer.Add(req)
+	if c.Authorizer != nil {
+		c.Authorizer.Add(req)
+	}
 
 	resp, err := c.Client.Do(req)
 	if err != nil {
@@ -2755,7 +2839,9 @@ func (c *Client) DeleteList(ctx context.Context, listID string) (*ListDeleteResp
 		return nil, fmt.Errorf("delete list request: %w", err)
 	}
 	req.Header.Add("Accept", "application/json")
-	c.Authorizer.Add(req)
+	if c.Authorizer != nil {
+		c.Authorizer.Add(req)
+	}
 
 	resp, err := c.Client.Do(req)
 	if err != nil {
@@ -2823,7 +2909,9 @@ func (c *Client) AddListMember(ctx context.Context, listID, userID string) (*Lis
 	}
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("Accept", "application/json")
-	c.Authorizer.Add(req)
+	if c.Authorizer != nil {
+		c.Authorizer.Add(req)
+	}
 
 	resp, err := c.Client.Do(req)
 	if err != nil {
@@ -2879,7 +2967,9 @@ func (c *Client) RemoveListMember(ctx context.Context, listID, userID string) (*
 		return nil, fmt.Errorf("remove list member request: %w", err)
 	}
 	req.Header.Add("Accept", "application/json")
-	c.Authorizer.Add(req)
+	if c.Authorizer != nil {
+		c.Authorizer.Add(req)
+	}
 
 	resp, err := c.Client.Do(req)
 	if err != nil {
@@ -2937,7 +3027,9 @@ func (c *Client) ListUserMembers(ctx context.Context, listID string, opts ListUs
 		return nil, fmt.Errorf("list user members request: %w", err)
 	}
 	req.Header.Add("Accept", "application/json")
-	c.Authorizer.Add(req)
+	if c.Authorizer != nil {
+		c.Authorizer.Add(req)
+	}
 	opts.addQuery(req)
 
 	resp, err := c.Client.Do(req)
@@ -3003,7 +3095,9 @@ func (c *Client) UserListMemberships(ctx context.Context, userID string, opts Us
 		return nil, fmt.Errorf("user list membership request: %w", err)
 	}
 	req.Header.Add("Accept", "application/json")
-	c.Authorizer.Add(req)
+	if c.Authorizer != nil {
+		c.Authorizer.Add(req)
+	}
 	opts.addQuery(req)
 
 	resp, err := c.Client.Do(req)
@@ -3079,7 +3173,9 @@ func (c *Client) UserPinList(ctx context.Context, userID, listID string) (*UserP
 	}
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("Accept", "application/json")
-	c.Authorizer.Add(req)
+	if c.Authorizer != nil {
+		c.Authorizer.Add(req)
+	}
 
 	resp, err := c.Client.Do(req)
 	if err != nil {
@@ -3135,7 +3231,9 @@ func (c *Client) UserUnpinList(ctx context.Context, userID, listID string) (*Use
 		return nil, fmt.Errorf("user unpin list request: %w", err)
 	}
 	req.Header.Add("Accept", "application/json")
-	c.Authorizer.Add(req)
+	if c.Authorizer != nil {
+		c.Authorizer.Add(req)
+	}
 
 	resp, err := c.Client.Do(req)
 	if err != nil {
@@ -3190,7 +3288,9 @@ func (c *Client) UserPinnedLists(ctx context.Context, userID string, opts UserPi
 		return nil, fmt.Errorf("user pinned list request: %w", err)
 	}
 	req.Header.Add("Accept", "application/json")
-	c.Authorizer.Add(req)
+	if c.Authorizer != nil {
+		c.Authorizer.Add(req)
+	}
 	opts.addQuery(req)
 
 	resp, err := c.Client.Do(req)
@@ -3266,7 +3366,9 @@ func (c *Client) UserFollowList(ctx context.Context, userID, listID string) (*Us
 	}
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("Accept", "application/json")
-	c.Authorizer.Add(req)
+	if c.Authorizer != nil {
+		c.Authorizer.Add(req)
+	}
 
 	resp, err := c.Client.Do(req)
 	if err != nil {
@@ -3322,7 +3424,9 @@ func (c *Client) UserUnfollowList(ctx context.Context, userID, listID string) (*
 		return nil, fmt.Errorf("user unfollow list request: %w", err)
 	}
 	req.Header.Add("Accept", "application/json")
-	c.Authorizer.Add(req)
+	if c.Authorizer != nil {
+		c.Authorizer.Add(req)
+	}
 
 	resp, err := c.Client.Do(req)
 	if err != nil {
@@ -3380,7 +3484,9 @@ func (c *Client) UserFollowedLists(ctx context.Context, userID string, opts User
 		return nil, fmt.Errorf("user followed list request: %w", err)
 	}
 	req.Header.Add("Accept", "application/json")
-	c.Authorizer.Add(req)
+	if c.Authorizer != nil {
+		c.Authorizer.Add(req)
+	}
 	opts.addQuery(req)
 
 	resp, err := c.Client.Do(req)
@@ -3446,7 +3552,9 @@ func (c *Client) ListUserFollowers(ctx context.Context, listID string, opts List
 		return nil, fmt.Errorf("list user followers request: %w", err)
 	}
 	req.Header.Add("Accept", "application/json")
-	c.Authorizer.Add(req)
+	if c.Authorizer != nil {
+		c.Authorizer.Add(req)
+	}
 	opts.addQuery(req)
 
 	resp, err := c.Client.Do(req)
@@ -3512,7 +3620,9 @@ func (c *Client) SpacesLookup(ctx context.Context, ids []string, opts SpacesLook
 		return nil, fmt.Errorf("space lookup request: %w", err)
 	}
 	req.Header.Add("Accept", "application/json")
-	c.Authorizer.Add(req)
+	if c.Authorizer != nil {
+		c.Authorizer.Add(req)
+	}
 	opts.addQuery(req)
 	if len(ids) > 1 {
 		q := req.URL.Query()
@@ -3590,7 +3700,9 @@ func (c *Client) SpacesByCreatorLookup(ctx context.Context, userIDs []string, op
 		return nil, fmt.Errorf("space by creator lookup request: %w", err)
 	}
 	req.Header.Add("Accept", "application/json")
-	c.Authorizer.Add(req)
+	if c.Authorizer != nil {
+		c.Authorizer.Add(req)
+	}
 	opts.addQuery(req)
 	q := req.URL.Query()
 	q.Add("user_ids", strings.Join(userIDs, ","))
@@ -3653,7 +3765,9 @@ func (c *Client) SpaceBuyersLookup(ctx context.Context, spaceID string, opts Spa
 		return nil, fmt.Errorf("space buyers lookup request: %w", err)
 	}
 	req.Header.Add("Accept", "application/json")
-	c.Authorizer.Add(req)
+	if c.Authorizer != nil {
+		c.Authorizer.Add(req)
+	}
 	opts.addQuery(req)
 
 	resp, err := c.Client.Do(req)
@@ -3709,7 +3823,9 @@ func (c *Client) SpaceTweetsLookup(ctx context.Context, spaceID string, opts Spa
 		return nil, fmt.Errorf("space tweets lookup request: %w", err)
 	}
 	req.Header.Add("Accept", "application/json")
-	c.Authorizer.Add(req)
+	if c.Authorizer != nil {
+		c.Authorizer.Add(req)
+	}
 	opts.addQuery(req)
 
 	resp, err := c.Client.Do(req)
@@ -3769,7 +3885,9 @@ func (c *Client) SpacesSearch(ctx context.Context, query string, opts SpacesSear
 		return nil, fmt.Errorf("space search request: %w", err)
 	}
 	req.Header.Add("Accept", "application/json")
-	c.Authorizer.Add(req)
+	if c.Authorizer != nil {
+		c.Authorizer.Add(req)
+	}
 	opts.addQuery(req)
 	q := req.URL.Query()
 	q.Add("query", query)
@@ -4034,7 +4152,9 @@ func (c *Client) QuoteTweetsLookup(ctx context.Context, tweetID string, opts Quo
 		return nil, fmt.Errorf("quote tweets lookup request: %w", err)
 	}
 	req.Header.Add("Accept", "application/json")
-	c.Authorizer.Add(req)
+	if c.Authorizer != nil {
+		c.Authorizer.Add(req)
+	}
 	opts.addQuery(req)
 
 	resp, err := c.Client.Do(req)
@@ -4100,7 +4220,9 @@ func (c *Client) TweetBookmarksLookup(ctx context.Context, userID string, opts T
 		return nil, fmt.Errorf("tweet bookmarks lookup request: %w", err)
 	}
 	req.Header.Add("Accept", "application/json")
-	c.Authorizer.Add(req)
+	if c.Authorizer != nil {
+		c.Authorizer.Add(req)
+	}
 	opts.addQuery(req)
 
 	resp, err := c.Client.Do(req)
@@ -4176,7 +4298,9 @@ func (c *Client) AddTweetBookmark(ctx context.Context, userID, tweetID string) (
 	}
 	req.Header.Add("Accept", "application/json")
 	req.Header.Add("Content-Type", "application/json")
-	c.Authorizer.Add(req)
+	if c.Authorizer != nil {
+		c.Authorizer.Add(req)
+	}
 
 	resp, err := c.Client.Do(req)
 	if err != nil {
@@ -4235,7 +4359,9 @@ func (c *Client) RemoveTweetBookmark(ctx context.Context, userID, tweetID string
 		return nil, fmt.Errorf("tweet bookmarks remove request: %w", err)
 	}
 	req.Header.Add("Accept", "application/json")
-	c.Authorizer.Add(req)
+	if c.Authorizer != nil {
+		c.Authorizer.Add(req)
+	}
 
 	resp, err := c.Client.Do(req)
 	if err != nil {
