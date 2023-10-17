@@ -1,3 +1,3 @@
-module github.com/g8rswimmer/go-twitter/v2
+module module github.com/func25/go-twitter/v2
 
-go 1.17
+go 1.20

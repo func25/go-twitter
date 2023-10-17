@@ -1,4 +1,6 @@
-// Deprecated: use github.com/g8rswimmer/go-twitter/v2 instead.
-module github.com/g8rswimmer/go-twitter
+// Deprecated: use github.com/func25/go-twitter/v2 instead.
+module github.com/func25/go-twitter
 
-go 1.17
+go 1.20
+
+require github.com/dghubble/oauth1 v0.7.2 // indirect

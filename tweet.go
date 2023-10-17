@@ -312,7 +312,11 @@ func (t *Tweet) Lookup(ctx context.Context, ids []string, options TweetFieldOpti
 		return nil, fmt.Errorf("tweet lookup request: %w", err)
 	}
 	req.Header.Add("Accept", "application/json")
-	t.Authorizer.Add(req)
+
+	if t.Authorizer != nil {
+		t.Authorizer.Add(req)
+	}
+
 	options.addQuery(req)
 	if len(ids) > 1 {
 		q := req.URL.Query()
@@ -373,7 +377,9 @@ func (t *Tweet) RecentSearch(ctx context.Context, query string, searchOpts Tweet
 		return nil, fmt.Errorf("tweet recent search request: %w", err)
 	}
 	req.Header.Add("Accept", "application/json")
-	t.Authorizer.Add(req)
+	if t.Authorizer != nil {
+		t.Authorizer.Add(req)
+	}
 	searchOpts.addQuery(req)
 	fieldOpts.addQuery(req)
 
@@ -430,7 +436,9 @@ func (t *Tweet) ApplyFilteredStreamRules(ctx context.Context, rules TweetSearchS
 
 	req.Header.Add("Accept", "application/json")
 	req.Header.Add("Content-type", "application/json")
-	t.Authorizer.Add(req)
+	if t.Authorizer != nil {
+		t.Authorizer.Add(req)
+	}
 	if validate {
 		q := req.URL.Query()
 		q.Add("dry_run", "true")
@@ -519,7 +527,9 @@ func (t *Tweet) FilteredStream(ctx context.Context, options TweetFieldOptions) (
 		return nil, fmt.Errorf("tweet lookup request: %w", err)
 	}
 	req.Header.Add("Accept", "application/json")
-	t.Authorizer.Add(req)
+	if t.Authorizer != nil {
+		t.Authorizer.Add(req)
+	}
 	options.addQuery(req)
 
 	resp, err := t.Client.Do(req)
@@ -558,7 +568,9 @@ func (t *Tweet) SampledStream(ctx context.Context, options TweetFieldOptions) (T
 		return nil, fmt.Errorf("tweet lookup request: %w", err)
 	}
 	req.Header.Add("Accept", "application/json")
-	t.Authorizer.Add(req)
+	if t.Authorizer != nil {
+		t.Authorizer.Add(req)
+	}
 	options.addQuery(req)
 
 	resp, err := t.Client.Do(req)
@@ -609,7 +621,9 @@ func (t *Tweet) HideReplies(ctx context.Context, id string, hidden bool) error {
 	}
 	req.Header.Add("Accept", "application/json")
 	req.Header.Add("Content-type", "application/json")
-	t.Authorizer.Add(req)
+	if t.Authorizer != nil {
+		t.Authorizer.Add(req)
+	}
 
 	resp, err := t.Client.Do(req)
 	if err != nil {
