@@ -26,6 +26,13 @@ func (t *twOAuth1) Client(ctx context.Context) *http.Client {
 	return t.config.Client(ctx, t.token)
 }
 
+func (t *twOAuth1) TwitterClient(ctx context.Context) *Client {
+	return &Client{
+		Client: t.Client(ctx),
+		Host:   "https://api.twitter.com",
+	}
+}
+
 func NewOAuth1Config(consumerKey, consumerSecret, accessToken, accessTokenSecret string) twOAuth1 {
 	return twOAuth1{
 		config: oauth1.NewConfig(consumerKey, consumerSecret),
@@ -43,10 +50,18 @@ func SetOAuth1(consumerKey, consumerSecret, accessToken, accessTokenSecret strin
 	}
 }
 
-func NewOAuthClient(ctx context.Context) (*http.Client, error) {
+func NewOAuth1Client(ctx context.Context) (*http.Client, error) {
 	if globalTwiOAuth1.config == nil {
 		return nil, ErrOAuth1NotSetup
 	}
 
 	return globalTwiOAuth1.Client(ctx), nil
+}
+
+func NewTwitterV2OAuth1(ctx context.Context) (*Client, error) {
+	if globalTwiOAuth1.config == nil {
+		return nil, ErrOAuth1NotSetup
+	}
+
+	return globalTwiOAuth1.TwitterClient(ctx), nil
 }
