@@ -33,10 +33,6 @@ func NewOAuth1Config(consumerKey, consumerSecret, accessToken, accessTokenSecret
 	}
 }
 
-func NewOAuth1Client(ctx context.Context, oauth twOAuth1) http.Client {
-	return *oauth.Client(ctx)
-}
-
 // ==== Singleton
 var globalTwiOAuth1 twOAuth1
 
@@ -47,10 +43,10 @@ func SetOAuth1(consumerKey, consumerSecret, accessToken, accessTokenSecret strin
 	}
 }
 
-func NewClient() (*http.Client, error) {
+func NewOAuthClient(ctx context.Context) (*http.Client, error) {
 	if globalTwiOAuth1.config == nil {
 		return nil, ErrOAuth1NotSetup
 	}
 
-	return globalTwiOAuth1.Client(context.Background()), nil
+	return globalTwiOAuth1.Client(ctx), nil
 }
