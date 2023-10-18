@@ -17,34 +17,34 @@ type Authorizer interface {
 	Add(req *http.Request)
 }
 
-type twOAuth1 struct {
+type TwOAuth1 struct {
 	config *oauth1.Config
 	token  *oauth1.Token
 }
 
-func (t *twOAuth1) Client(ctx context.Context) *http.Client {
+func (t *TwOAuth1) Client(ctx context.Context) *http.Client {
 	return t.config.Client(ctx, t.token)
 }
 
-func (t *twOAuth1) TwitterClient(ctx context.Context) *Client {
+func (t *TwOAuth1) TwitterClient(ctx context.Context) *Client {
 	return &Client{
 		Client: t.Client(ctx),
 		Host:   "https://api.twitter.com",
 	}
 }
 
-func NewOAuth1Config(consumerKey, consumerSecret, accessToken, accessTokenSecret string) twOAuth1 {
-	return twOAuth1{
+func NewOAuth1Config(consumerKey, consumerSecret, accessToken, accessTokenSecret string) TwOAuth1 {
+	return TwOAuth1{
 		config: oauth1.NewConfig(consumerKey, consumerSecret),
 		token:  oauth1.NewToken(accessToken, accessTokenSecret),
 	}
 }
 
 // ==== Singleton
-var globalTwiOAuth1 twOAuth1
+var globalTwiOAuth1 TwOAuth1
 
 func SetOAuth1(consumerKey, consumerSecret, accessToken, accessTokenSecret string) {
-	globalTwiOAuth1 = twOAuth1{
+	globalTwiOAuth1 = TwOAuth1{
 		config: oauth1.NewConfig(consumerKey, consumerSecret),
 		token:  oauth1.NewToken(accessToken, accessTokenSecret),
 	}
