@@ -11,8 +11,8 @@ import (
 )
 
 type UploadMediaResp struct {
-	MediaID          string      `json:"media_id"`
-	MediaKey         string      `json:"media_key"`
+	MediaID int64 `json:"media_id"`
+	// MediaKey         string      `json:"media_key"`
 	MediaIDString    string      `json:"media_id_string"`
 	Size             int         `json:"size"`
 	ExpiresAfterSecs int         `json:"expires_after_secs"`
@@ -28,7 +28,7 @@ type ImageInfoV1 struct {
 }
 
 // SimpleUpload will upload the media and return the media_id
-func (c *Client) SimpleUpload(ctx context.Context, filename string, file io.Reader, mediaData, mediaCategory, additionalOwners string) (interface{}, error) {
+func (c *Client) SimpleUpload(ctx context.Context, filename string, file io.Reader, mediaData, mediaCategory, additionalOwners string) (*UploadMediaResp, error) {
 	if file != nil && mediaData != "" {
 		return nil, fmt.Errorf("either provide file or mediaData, not both")
 	}
@@ -87,7 +87,7 @@ func (c *Client) SimpleUpload(ctx context.Context, filename string, file io.Read
 		return nil, fmt.Errorf("unexpected HTTP status: %s", resp.Status)
 	}
 
-	var raw interface{}
+	var raw UploadMediaResp
 	err = json.NewDecoder(resp.Body).Decode(&raw)
 	if err != nil {
 		b, errRead := io.ReadAll(resp.Body)
@@ -97,5 +97,5 @@ func (c *Client) SimpleUpload(ctx context.Context, filename string, file io.Read
 		return nil, fmt.Errorf("decode response: %w, body: %v", err, string(b))
 	}
 
-	return raw, nil
+	return &raw, nil
 }
